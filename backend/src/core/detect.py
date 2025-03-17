@@ -55,12 +55,20 @@ class Detector:
         for result in results:
             detections = []
             for det in result.boxes.data:
+                x1, y1, x2, y2 = det[:4].tolist()
+                
+                # Add crop_box offset to transform coordinates back to original image space
+                orig_x1 = x1 + self.crop_box[0]  
+                orig_y1 = y1 + self.crop_box[1] 
+                orig_x2 = x2 + self.crop_box[0]  
+                orig_y2 = y2 + self.crop_box[1] 
+                
                 detection = {
-                    'bbox': det[:4].tolist(),
+                    'bbox': [orig_x1, orig_y1, orig_x2, orig_y2],
                     'conf': float(det[4]),
                     'class_name': result.names[int(det[5])]
                 }
                 detections.append(detection)
         if self.debug:
-            visualize_objects(image=cropped_img, obj=detections, output_path=self.vis_path)
+            visualize_objects(image=image, obj=detections, output_path=self.vis_path)
         return detections
