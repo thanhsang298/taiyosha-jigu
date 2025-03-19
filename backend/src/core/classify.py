@@ -2,15 +2,16 @@ import numpy as np
 import cv2
 from src.config import TaiyoConfig
 from ultralytics import YOLO
-from src.utils.common import visualize_objects
+from src.utils.common import crop_center
 
 
 class Classifier:
     def __init__(self, config: TaiyoConfig):
         self.config = config
+        self.imgW = config.API.IMG_WIDTH
+        self.imgH = config.API.IMG_HEIGHT
         self.img_size = config.Classifier.IMG_SIZE
         self.model_path = config.Classifier.MODEL_PATH
-        self.crop_box = config.Classifier.CROP_BOX
         self.device = config.Classifier.DEVICE
         self.conf = config.Classifier.CONF
         self.debug = config.Classifier.DEBUG
@@ -47,8 +48,8 @@ class Classifier:
 
 
     def run(self, image):
-        cropped_img  = self._cropbox(image)
-        results = self.model(cropped_img, imgsz=(self.img_size,self.img_size), conf=self.conf)
+        cropped_img  = crop_center(image, self.imgH, self.imgH, new_height=self.img_size, new_width=self.img_size)
+        results = self.model(cropped_img)
         
         for result in results:
             predicted_class_index = result.probs.top1
