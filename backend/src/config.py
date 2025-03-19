@@ -26,8 +26,18 @@ class TaiyoConfig(BaseSettings):
         DEVICE: str = "cuda"
         IMG_SIZE: int = 1280
         BATCH_SIZE: int = 1
-        CONF: float  = 0.45
+        CONF: float  = 0.25
         CROP_BOX: tuple = (5, 1250, 5467, 2400)
-        MODEL_PATH: str = "./weights/best.pt"
+        MODEL_PATH: str = "./weights/detector/best.pt"
         DEBUG: bool = True
-        VIS_PATH: str = "./visualization/debug_img.jpg"
+        VIS_PATH: str = "./visualization/detector-img.jpg"
+        
+    class Classifier:
+        DEVICE: str = "cuda"
+        IMG_SIZE: int = 640
+        BATCH_SIZE: int = 1
+        CONF: float  = 0.25
+        CROP_BOX: tuple = (5, 1250, 5467, 2400)
+        MODEL_PATH: str = "./weights/cls/best.pt"
+        DEBUG: bool = True  
+        VIS_PATH: str = "./visualization/classifier-img.jpg"
