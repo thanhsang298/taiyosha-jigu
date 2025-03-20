@@ -24,10 +24,10 @@ class TaiyoConfig(BaseSettings):
 
     class Detector:
         DEVICE: str = "cuda"
-        IMG_SIZE: int = 1280
+        IMG_SIZE: int = 1920
         BATCH_SIZE: int = 1
         CONF: float  = 0.25
-        CROP_BOX: tuple = (5, 1250, 5467, 2400)
+        CROP_BOX: tuple = (300, 1250, 5167, 2400)
         MODEL_PATH: str = "./weights/detector/best.pt"
         DEBUG: bool = True
         VIS_PATH: str = "./visualization/detector-img.jpg"

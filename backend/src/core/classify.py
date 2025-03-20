@@ -49,7 +49,7 @@ class Classifier:
 
     def run(self, image):
         cropped_img  = crop_center(image, self.imgH, self.imgH, new_height=self.img_size, new_width=self.img_size)
-        results = self.model(cropped_img)
+        results = self.model(cropped_img, verbose=False)
         
         for result in results:
             predicted_class_index = result.probs.top1

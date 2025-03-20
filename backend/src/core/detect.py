@@ -50,7 +50,7 @@ class Detector:
 
     def run(self, image):
         cropped_img  = self._cropbox(image)
-        results = self.model.predict(cropped_img, imgsz=(self.img_size,self.img_size), conf=self.conf, stream=True)
+        results = self.model.predict(cropped_img, imgsz=(self.img_size,self.img_size), conf=self.conf, stream=True, verbose=False)
 
         for result in results:
             detections = []
