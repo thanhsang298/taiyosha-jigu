@@ -6,13 +6,12 @@ from fastapi import FastAPI, APIRouter, File, UploadFile
 from fastapi.responses import JSONResponse
 from src.config import TaiyoConfig
 from src.detector import TaiyoJiguDetector
-from src.utils.logger import Logger
+from src.utils.logger import logger
 from PIL import Image
 
 
 api_router = APIRouter()
 detector = TaiyoJiguDetector(config=TaiyoConfig)
-logger = Logger(config=TaiyoConfig)
 
 @api_router.post("/detect")
 async def detect(
@@ -38,14 +37,12 @@ async def detect(
 
         results = detector.run(image=img)
         
-        print(f'Inference API time: {time.time() - t1:.3f}s')
         logger.info(f'Inference API time: {time.time() - t1:.3f}s')
 
         return JSONResponse(content=results)
 
     except Exception as e:
-        # Log the exception (optional)
-        print(f"Error during prediction: {e}")
+        logger.error(f"[API] Error due to: {e}")
         return JSONResponse(
             content={"error": "Internal server error."},
             status_code=500

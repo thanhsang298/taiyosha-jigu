@@ -57,3 +57,4 @@ class Logger:
             return f"{message} | {formatted_vars}"
         return message
 
+logger = Logger(config=TaiyoConfig)
