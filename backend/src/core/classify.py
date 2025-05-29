@@ -1,8 +1,11 @@
 import numpy as np
 import cv2
-from src.config import TaiyoConfig
 from ultralytics import YOLO
+
+from src.config import TaiyoConfig
 from src.utils.common import crop_center
+from src.utils import logger
+
 
 
 class Classifier:
@@ -20,16 +23,17 @@ class Classifier:
     
     def _load_model(self):
         try:
-            print(f"------------------------------------> Loading Classifier model from {self.model_path} on device '{self.device}'...")
+            logger.info(f"Loading Classifier model from {self.model_path} on device '{self.device}'...")
             model = YOLO(self.model_path)
-            print(f"------------------------------------> Loaded Classifier successfully.")
+            model.to(self.device)
+            logger.info(f"Loaded Classifier successfully.")
             return model
             
         except FileNotFoundError:
-            print(f"Model file not found at {self.model_path}. Please check the path.")
+            logger.error(f"Model file not found at {self.model_path}. Please check the path.")
             raise
         except Exception as e:
-            print(f"An error occurred while loading the model: {e}")
+            logger.error(f"An error occurred while loading the model: {e}")
             raise
 
     def _cropbox(self, image: np.ndarray) -> np.ndarray:
@@ -53,8 +57,6 @@ class Classifier:
         
         for result in results:
             predicted_class_index = result.probs.top1
-            predicted_class_name = result.names[predicted_class_index]
-            print(f"Predicted class: {predicted_class_name}")
             
         if self.debug:
             cv2.imwrite(self.vis_path, cropped_img)
